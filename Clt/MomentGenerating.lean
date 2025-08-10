@@ -43,7 +43,7 @@ lemma integrable_norm_rpow_antitone {α} [MeasurableSpace α]
   rcases hp.eq_or_lt with (rfl | hp)
   · simp
   rcases hq.eq_or_lt with (rfl | hq)
-  · exact (hp.not_le hpq).elim
+  · exact (hp.not_ge hpq).elim
   revert hint
   convert fun h ↦ MemLp.mono_exponent h (ENNReal.ofReal_le_ofReal hpq) using 1
   · rw [← integrable_norm_rpow_iff hf, ENNReal.toReal_ofReal hq.le] <;> simp_all
@@ -90,7 +90,7 @@ lemma continuousBilinFormOfInner_apply {x y : E} : continuousBilinFormOfInner x 
 
 @[simp]
 lemma toLinearMap₂_continuousBilinFormOfInner :
-    ContinuousLinearMap.toLinearMap₂ (continuousBilinFormOfInner : E →L[ℝ] E →L[ℝ] ℝ)
+    ContinuousLinearMap.toLinearMap₁₂ (continuousBilinFormOfInner : E →L[ℝ] E →L[ℝ] ℝ)
       = bilinFormOfRealInner := rfl
 
 variable [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
@@ -123,7 +123,7 @@ variable {μ : Measure ℝ} [IsProbabilityMeasure μ]
 open VectorFourier in
 theorem iteratedDeriv_charFun {n : ℕ} {t : ℝ} (hint : Integrable (|·| ^ n) μ) :
     iteratedDeriv n (charFun μ) t = I ^ n * ∫ x, x ^ n * exp (t * x * I) ∂μ := by
-  have h : bilinFormOfRealInner = (ContinuousLinearMap.mul ℝ ℝ).toLinearMap₂ := by ext; rfl
+  have h : bilinFormOfRealInner = (ContinuousLinearMap.mul ℝ ℝ).toLinearMap₁₂ := by ext; rfl
   have hint' (k : ℕ) (hk : k ≤ (n : ℕ∞)) : Integrable (fun x ↦ ‖x‖ ^ k * ‖(1 : ℝ → ℂ) x‖) μ := by
     simp only [Pi.one_apply, norm_one, mul_one]
     rw [Nat.cast_le] at hk
@@ -135,8 +135,8 @@ theorem iteratedDeriv_charFun {n : ℕ} {t : ℝ} (hint : Integrable (|·| ^ n) 
     rw [h, iteratedDeriv, iteratedFDeriv_fourierIntegral _ hint']
     · rw [fourierIntegral_continuousMultilinearMap_apply]
       · unfold fourierIntegral Real.fourierChar Circle.exp
-        simp only [ContinuousMap.coe_mk, ofReal_mul, ofReal_ofNat, neg_mul,
-          ContinuousLinearMap.toLinearMap₂_apply, ContinuousLinearMap.mul_apply', mul_neg, neg_neg,
+        simp only [ContinuousMap.coe_mk, ofReal_mul, ofReal_ofNat,
+          ContinuousLinearMap.toLinearMap₁₂_apply, ContinuousLinearMap.mul_apply', mul_neg, neg_neg,
           AddChar.coe_mk, ofReal_inv, fourierPowSMulRight_apply, mul_one, Finset.prod_const,
           Finset.card_univ, Fintype.card_fin, Pi.one_apply, real_smul, ofReal_pow, smul_eq_mul,
           Circle.smul_def, ofReal_neg]

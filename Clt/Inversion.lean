@@ -82,7 +82,7 @@ lemma MeasureTheory.ProbabilityMeasure.tendsto_charPoly_of_tendsto_charFun
       exact BoundedContinuousFunction.integrable μ _
   simp_rw [h_eq (μ _), h_eq μ₀]
   refine tendsto_finset_sum _ fun y hy ↦ Tendsto.const_mul _ ?_
-  simp only [bilinFormOfRealInner_apply_apply, inner_apply, conj_trivial]
+  simp only [bilinFormOfRealInner_apply_apply]
   simp_rw [← charFun_eq_integral_probChar]
   exact h y
 
